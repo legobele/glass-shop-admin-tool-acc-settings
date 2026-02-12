@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QGI Account Settings</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: white;
+            color: #e74c3c;
+        }
+
+        .card-body {
+            padding: 30px;
+        }
+
+        .user-info {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .user-info h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .user-info p {
+            color: #7f8c8d;
+            margin: 5px 0;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .alert {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        .alert-error {
+            background: #fee;
+            color: #c0392b;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .help-text {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+
+        .pin-status {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .pin-status.active {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .pin-status.inactive {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <div class="logo">⚙️ Account Settings</div>
+                <a href="https://legobele.github.io/glass-shop-admin-tool" class="back-btn">← Back</a>
+            </div>
+            
+            <div class="card-body">
+                <div class="user-info" id="user-info-section">
+                    <!-- User info will be populated here -->
+                </div>
+
+                <div id="alert-container"></div>
+
+                <h2 class="section-title">Set Login PIN</h2>
+                
+                <div class="pin-status inactive" id="pin-status">
+                    <strong>📍 PIN Status:</strong> Not Set
+                </div>
+
+                <p style="color: #7f8c8d; margin-bottom: 25px;">
+                    Set a 4-digit PIN for faster touchscreen login. You'll still need your email address to login with PIN.
+                </p>
+
+                <form id="pin-form" onsubmit="event.preventDefault(); setPIN();">
+                    <div class="form-group">
+                        <label class="form-label">Current Password</label>
+                        <input type="password" id="current-password" class="form-input" placeholder="Enter your current password" required>
+                        <div class="help-text">Required to verify your identity</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">New PIN (4 digits)</label>
+                        <input type="text" id="new-pin" class="form-input" placeholder="Enter 4-digit PIN" maxlength="4" pattern="\d{4}" required>
+                        <div class="help-text">Must be exactly 4 digits (e.g., 1234)</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Confirm PIN</label>
+                        <input type="text" id="confirm-pin" class="form-input" placeholder="Re-enter PIN" maxlength="4" pattern="\d{4}" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="submit-btn">
+                        <span id="btn-text">Set PIN</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API endpoint - UPDATE THIS WITH YOUR NGROK URL
+        const API_BASE_URL = 'http://localhost:3000';
+
+        function getAuthToken() {
+            return localStorage.getItem('qgi-auth-token');
+        }
+
+        function getAuthHeaders() {
+            const token = getAuthToken();
+            return {
+                'Content-Type': 'application/json',
+                'ngrok-skip-browser-warning': 'true',
+                'Authorization': token ? `Bearer ${token}` : ''
+            };
+        }
+
+        function showAlert(message, type) {
+            const container = document.getElementById('alert-container');
+            container.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 5000);
+        }
+
+        // Check auth on page load
+        window.addEventListener('load', async function() {
+            const token = getAuthToken();
+            if (!token) {
+                window.location.href = 'https://legobele.github.io/glass-shop-admin-login-page';
+                return;
+            }
+
+            // Verify token and load user info
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/auth/verify`, {
+                    headers: getAuthHeaders()
+                });
+
+                if (!response.ok) {
+                    window.location.href = 'https://legobele.github.io/glass-shop-admin-login-page';
+                    return;
+                }
+
+                const data = await response.json();
+                displayUserInfo(data.user);
+                
+                // Check if user has PIN
+                const userInfo = localStorage.getItem('qgi-user');
+                if (userInfo) {
+                    const user = JSON.parse(userInfo);
+                    updatePinStatus(user.hasPin);
+                }
+            } catch (error) {
+                console.error('Auth verification failed:', error);
+                window.location.href = 'https://legobele.github.io/glass-shop-admin-login-page';
+            }
+        });
+
+        function displayUserInfo(user) {
+            const section = document.getElementById('user-info-section');
+            section.innerHTML = `
+                <h3>👤 Account Information</h3>
+                <p><strong>Name:</strong> ${user.fullName || 'Not set'}</p>
+                <p><strong>Email:</strong> ${user.email}</p>
+                <p><strong>User ID:</strong> ${user.userId}</p>
+            `;
+        }
+
+        function updatePinStatus(hasPin) {
+            const statusDiv = document.getElementById('pin-status');
+            if (hasPin) {
+                statusDiv.className = 'pin-status active';
+                statusDiv.innerHTML = '<strong>✅ PIN Status:</strong> Active';
+                document.getElementById('btn-text').textContent = 'Update PIN';
+            } else {
+                statusDiv.className = 'pin-status inactive';
+                statusDiv.innerHTML = '<strong>📍 PIN Status:</strong> Not Set';
+                document.getElementById('btn-text').textContent = 'Set PIN';
+            }
+        }
+
+        async function setPIN() {
+            const currentPassword = document.getElementById('current-password').value;
+            const newPin = document.getElementById('new-pin').value;
+            const confirmPin = document.getElementById('confirm-pin').value;
+
+            // Validation
+            if (!/^\d{4}$/.test(newPin)) {
+                showAlert('PIN must be exactly 4 digits', 'error');
+                return;
+            }
+
+            if (newPin !== confirmPin) {
+                showAlert('PINs do not match', 'error');
+                return;
+            }
+
+            const submitBtn = document.getElementById('submit-btn');
+            const btnText = document.getElementById('btn-text');
+            
+            submitBtn.disabled = true;
+            btnText.innerHTML = '<span class="loading-spinner"></span>';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/auth/set-pin`, {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify({
+                        currentPassword: currentPassword,
+                        pin: newPin
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showAlert('PIN set successfully! You can now use PIN login.', 'success');
+                    
+                    // Update user info in localStorage
+                    const userInfo = localStorage.getItem('qgi-user');
+                    if (userInfo) {
+                        const user = JSON.parse(userInfo);
+                        user.hasPin = true;
+                        localStorage.setItem('qgi-user', JSON.stringify(user));
+                        updatePinStatus(true);
+                    }
+                    
+                    // Clear form
+                    document.getElementById('pin-form').reset();
+                } else {
+                    showAlert(data.message || 'Failed to set PIN', 'error');
+                }
+            } catch (error) {
+                console.error('Set PIN error:', error);
+                showAlert('Failed to connect to server. Check your API URL.', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                btnText.textContent = document.getElementById('pin-status').classList.contains('active') ? 'Update PIN' : 'Set PIN';
+            }
+        }
+
+        // Input validation - only allow digits
+        document.getElementById('new-pin').addEventListener('input', function(e) {
+            this.value = this.value.replace(/\D/g, '');
+        });
+
+        document.getElementById('confirm-pin').addEventListener('input', function(e) {
+            this.value = this.value.replace(/\D/g, '');
+        });
+    </script>
+</body>
+</html>
