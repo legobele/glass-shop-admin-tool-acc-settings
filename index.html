@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QGI Account Settings v0.7-access</title>
+    <title>QGI Account Settings</title>
     <style>
         * {
             margin: 0;
@@ -571,14 +571,15 @@
                 }
             });
 
-            ('apply-accessibility').onclick = function() {
+            document.getElementById('apply-accessibility').onclick = function() {
                 accessibilitySettings.highContrast = document.getElementById('high-contrast-toggle').checked;
                 accessibilitySettings.reducedMotion = document.getElementById('reduced-motion-toggle').checked;
                 accessibilitySettings.focusIndicators = document.getElementById('focus-indicators-toggle').checked;
                 accessibilitySettings.colorTone = document.getElementById('color-tone-select').value;
                 accessibilitySettings.fontSize = document.getElementById('font-size-select').value;
                 
-                applyAccessibilitySettings();menu.remove();
+                applyAccessibilitySettings();
+                menu.remove();
                 
                 // announce to screen readers
                 const announcement = document.createElement('div');
